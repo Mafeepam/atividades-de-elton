@@ -1,22 +1,29 @@
 import { useState } from 'react';
 import Tabs from '../components/Tabs/Tabs';
 import ProgressBar from '../components/ProgressBar/ProgressBar';
+import { useLanguage } from '../context/LanguageContext';
 import { useToast } from '../context/ToastContext';
 
 const ORDERS = [
-  { id: '#10482', date: '28/10/2026', total: 'R$ 249,90', status: 'Entregue' },
-  { id: '#10397', date: '15/10/2026', total: 'R$ 89,90', status: 'Em trânsito' },
-  { id: '#10211', date: '02/10/2026', total: 'R$ 1.120,00', status: 'Entregue' },
+  { id: '#10482', date: '2026-10-28', total: 249.9, status: 'delivered' },
+  { id: '#10397', date: '2026-10-15', total: 89.9, status: 'inTransit' },
+  { id: '#10211', date: '2026-10-02', total: 1120, status: 'delivered' },
 ];
 
 export default function Perfil() {
   const { showToast } = useToast();
+  const { t, language } = useLanguage();
   const [form, setForm] = useState({ nome: 'Ana Souza', email: 'ana.souza@exemplo.com', cidade: 'Salvador' });
   const [notifications, setNotifications] = useState(true);
 
-
+  // Quanto do perfil está preenchido (para a barra de progresso)
   const filled = Object.values(form).filter((value) => value.trim() !== '').length;
   const completion = (filled / Object.keys(form).length) * 100;
+
+  const formatDate = (iso) =>
+    new Date(`${iso}T12:00:00`).toLocaleDateString(language);
+  const formatMoney = (value) =>
+    value.toLocaleString(language, { style: 'currency', currency: 'BRL', currencyDisplay: 'narrowSymbol' });
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -26,43 +33,54 @@ export default function Perfil() {
   function handleSubmit(event) {
     event.preventDefault();
     if (!form.email.includes('@')) {
-      showToast({ type: 'error', message: 'Informe um e-mail válido.' });
+      showToast({ type: 'error', message: t('profile.invalidEmail') });
       return;
     }
-    showToast({ type: 'success', message: 'Dados pessoais salvos.' });
+    showToast({ type: 'success', message: t('profile.saved') });
   }
 
   const tabs = [
     {
       id: 'dados',
-      label: 'Dados pessoais',
+      label: t('profile.tabData'),
       content: (
         <form className="form" onSubmit={handleSubmit}>
-          <ProgressBar value={completion} label="Perfil completo" status={completion === 100 ? 'success' : 'default'} />
+          <ProgressBar value={completion} label={t('profile.completion')} status={completion === 100 ? 'success' : 'default'} />
           <div className="form__grid">
-            <label>Nome<input name="nome" value={form.nome} onChange={handleChange} /></label>
-            <label>E-mail<input name="email" type="email" value={form.email} onChange={handleChange} /></label>
-            <label>Cidade<input name="cidade" value={form.cidade} onChange={handleChange} /></label>
+            <label>{t('profile.name')}<input name="nome" value={form.nome} onChange={handleChange} /></label>
+            <label>{t('profile.email')}<input name="email" type="email" value={form.email} onChange={handleChange} /></label>
+            <label>{t('profile.city')}<input name="cidade" value={form.cidade} onChange={handleChange} /></label>
           </div>
-          <button type="submit" className="btn btn--primary">Salvar</button>
+          <button type="submit" className="btn btn--primary">{t('profile.save')}</button>
         </form>
       ),
     },
     {
       id: 'pedidos',
-      label: 'Pedidos',
+      label: t('profile.tabOrders'),
       content: (
         <div className="table-wrapper">
           <table className="table">
-            <caption className="sr-only">Últimos pedidos</caption>
+            <caption className="sr-only">{t('profile.ordersCaption')}</caption>
             <thead>
-              <tr><th scope="col">Pedido</th><th scope="col">Data</th><th scope="col">Total</th><th scope="col">Status</th></tr>
+              <tr>
+                <th scope="col">{t('profile.colOrder')}</th>
+                <th scope="col">{t('profile.colDate')}</th>
+                <th scope="col">{t('profile.colTotal')}</th>
+                <th scope="col">{t('profile.colStatus')}</th>
+              </tr>
             </thead>
             <tbody>
               {ORDERS.map((order) => (
                 <tr key={order.id}>
-                  <td>{order.id}</td><td>{order.date}</td><td>{order.total}</td>
-                  <td><span className={`tag ${order.status === 'Entregue' ? 'tag--success' : ''}`}>{order.status}</span></td>
+                  <td>{order.id}</td>
+                  <td>{formatDate(order.date)}</td>
+                  <td>{formatMoney(order.total)}</td>
+                  <td>
+                    <span className={`tag ${order.status === 'delivered' ? 'tag--success' : ''}`}>
+                      {t(`profile.${order.status}`)}
+                    </span>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -72,7 +90,7 @@ export default function Perfil() {
     },
     {
       id: 'config',
-      label: 'Configurações',
+      label: t('profile.tabSettings'),
       content: (
         <div className="stack">
           <label className="checkbox">
@@ -81,12 +99,12 @@ export default function Perfil() {
               checked={notifications}
               onChange={(e) => {
                 setNotifications(e.target.checked);
-                showToast({ type: 'info', message: e.target.checked ? 'Notificações por e-mail ativadas.' : 'Notificações por e-mail desativadas.' });
+                showToast({ type: 'info', message: e.target.checked ? t('profile.notifOn') : t('profile.notifOff') });
               }}
             />
-            Receber ofertas por e-mail
+            {t('profile.newsletter')}
           </label>
-          <p className="muted">As preferências são salvas automaticamente.</p>
+          <p className="muted">{t('profile.autoSave')}</p>
         </div>
       ),
     },
@@ -95,10 +113,10 @@ export default function Perfil() {
   return (
     <>
       <header className="page-header">
-        <h1>Meu perfil</h1>
-        <p className="muted">Olá, {form.nome || 'visitante'}!</p>
+        <h1>{t('profile.title')}</h1>
+        <p className="muted">{t('profile.hello', { name: form.nome || t('profile.visitor') })}</p>
       </header>
-      <Tabs tabs={tabs} ariaLabel="Seções do perfil" />
+      <Tabs tabs={tabs} ariaLabel={t('profile.tabsLabel')} />
     </>
   );
 }

@@ -1,8 +1,8 @@
-import { useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Header from './components/Layout/Header';
 import Footer from './components/Layout/Footer';
 import ToastContainer from './components/Toast/ToastContainer';
+import { useLanguage } from './context/LanguageContext';
 import { useToast } from './context/ToastContext';
 import Home from './pages/Home';
 import Produtos from './pages/Produtos';
@@ -13,16 +13,21 @@ import NotFound from './pages/NotFound';
 
 export default function App() {
   const { showToast } = useToast();
-  const [language, setLanguage] = useState('pt-BR');
+  const { language, setLanguage, t } = useLanguage();
+
 
   function handleLanguageChange(option) {
     setLanguage(option.value);
-    showToast({ type: 'info', message: `Idioma alterado para ${option.label}.` });
+    showToast({
+      type: 'info',
+      title: t('toast.info', {}, option.value),
+      message: t('toast.languageChanged', { lang: option.label }, option.value),
+    });
   }
 
   return (
     <>
-      <a href="#conteudo" className="skip-link">Pular para o conteúdo</a>
+      <a href="#conteudo" className="skip-link">{t('common.skip')}</a>
       <Header language={language} onLanguageChange={handleLanguageChange} />
 
       <main id="conteudo" className="container main">

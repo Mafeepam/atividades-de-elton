@@ -1,15 +1,18 @@
 import Accordion from '../components/Accordion/Accordion';
-import { faqItems } from '../data/faq';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Faq() {
+  const { t } = useLanguage();
+  const items = t('faq.items');
+
   return (
     <>
       <header className="page-header">
-        <h1>Perguntas frequentes</h1>
-        <p className="muted">Clique em uma pergunta para ver a resposta. Só uma fica aberta por vez.</p>
+        <h1>{t('faq.title')}</h1>
+        <p className="muted">{t('faq.subtitle')}</p>
       </header>
       <div className="narrow">
-        <Accordion items={faqItems} defaultOpenId="prazo" />
+        <Accordion items={items} defaultOpenId="prazo" />
       </div>
     </>
   );
