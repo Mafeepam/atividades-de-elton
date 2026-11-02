@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import Dropdown from '../Dropdown/Dropdown';
+import { useLanguage } from '../../context/LanguageContext';
 import './Layout.css';
 
 const LINKS = [
-  { to: '/', label: 'Início' },
-  { to: '/produtos', label: 'Produtos' },
-  { to: '/upload', label: 'Upload' },
-  { to: '/perfil', label: 'Perfil' },
-  { to: '/faq', label: 'FAQ' },
+  { to: '/', key: 'nav.home' },
+  { to: '/produtos', key: 'nav.products' },
+  { to: '/upload', key: 'nav.upload' },
+  { to: '/perfil', key: 'nav.profile' },
+  { to: '/faq', key: 'nav.faq' },
 ];
 
 const LANGUAGES = [
@@ -19,6 +20,7 @@ const LANGUAGES = [
 
 export default function Header({ language, onLanguageChange }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { t } = useLanguage();
 
   return (
     <header className="header">
@@ -33,7 +35,7 @@ export default function Header({ language, onLanguageChange }) {
           className="header__menu-btn"
           aria-expanded={menuOpen}
           aria-controls="menu-principal"
-          aria-label={menuOpen ? 'Fechar menu' : 'Abrir menu'}
+          aria-label={menuOpen ? t('nav.closeMenu') : t('nav.openMenu')}
           onClick={() => setMenuOpen((open) => !open)}
         >
           <span aria-hidden="true">{menuOpen ? '✕' : '☰'}</span>
@@ -42,19 +44,19 @@ export default function Header({ language, onLanguageChange }) {
         <nav
           id="menu-principal"
           className={`header__nav ${menuOpen ? 'is-open' : ''}`}
-          aria-label="Menu principal"
+          aria-label={t('nav.main')}
         >
           <ul>
             {LINKS.map((link) => (
               <li key={link.to}>
                 <NavLink to={link.to} end={link.to === '/'} onClick={() => setMenuOpen(false)}>
-                  {link.label}
+                  {t(link.key)}
                 </NavLink>
               </li>
             ))}
           </ul>
           <Dropdown
-            label="Idioma"
+            label={t('nav.language')}
             options={LANGUAGES}
             selectedValue={language}
             onSelect={onLanguageChange}

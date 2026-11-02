@@ -1,7 +1,7 @@
 import './ProgressBar.css';
 
 export default function ProgressBar({ value, label, showValue = true, status = 'default' }) {
-
+ 
   const safeValue = Math.min(100, Math.max(0, Math.round(value)));
 
   return (

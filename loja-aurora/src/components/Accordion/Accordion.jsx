@@ -2,6 +2,7 @@ import { useId, useState } from 'react';
 import './Accordion.css';
 
 export default function Accordion({ items, allowMultiple = false, defaultOpenId = null }) {
+
   const [openIds, setOpenIds] = useState(defaultOpenId ? [defaultOpenId] : []);
   const baseId = useId();
 

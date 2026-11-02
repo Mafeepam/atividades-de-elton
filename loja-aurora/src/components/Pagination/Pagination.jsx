@@ -1,5 +1,10 @@
+import { useLanguage } from '../../context/LanguageContext';
 import './Pagination.css';
 
+/**
+ * Gera a lista de páginas a exibir, com "…" quando há muitas.
+ * Ex.: totalPages=10, current=5 → [1, '…', 4, 5, 6, '…', 10]
+ */
 function getPageItems(currentPage, totalPages) {
   if (totalPages <= 7) {
     return Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -15,22 +20,23 @@ function getPageItems(currentPage, totalPages) {
 }
 
 export default function Pagination({ totalPages, currentPage, onPageChange }) {
+  const { t } = useLanguage(); // hooks sempre antes de qualquer return
   if (totalPages <= 1) return null;
 
   const isFirst = currentPage === 1;
   const isLast = currentPage === totalPages;
 
   return (
-    <nav className="pagination" aria-label="Paginação">
+    <nav className="pagination" aria-label={t('pagination.label')}>
       <button
         type="button"
         className="pagination__btn pagination__btn--nav"
         onClick={() => onPageChange(currentPage - 1)}
         disabled={isFirst}
-        aria-label="Página anterior"
+        aria-label={t('pagination.prevAria')}
       >
         <span aria-hidden="true">‹</span>
-        <span className="pagination__nav-text">Anterior</span>
+        <span className="pagination__nav-text">{t('pagination.prev')}</span>
       </button>
 
       <ul className="pagination__list">
@@ -43,7 +49,7 @@ export default function Pagination({ totalPages, currentPage, onPageChange }) {
                 type="button"
                 className={`pagination__btn ${item === currentPage ? 'is-active' : ''}`}
                 onClick={() => onPageChange(item)}
-                aria-label={`Página ${item}`}
+                aria-label={t('pagination.page', { n: item })}
                 aria-current={item === currentPage ? 'page' : undefined}
               >
                 {item}
@@ -58,9 +64,9 @@ export default function Pagination({ totalPages, currentPage, onPageChange }) {
         className="pagination__btn pagination__btn--nav"
         onClick={() => onPageChange(currentPage + 1)}
         disabled={isLast}
-        aria-label="Próxima página"
+        aria-label={t('pagination.nextAria')}
       >
-        <span className="pagination__nav-text">Próxima</span>
+        <span className="pagination__nav-text">{t('pagination.next')}</span>
         <span aria-hidden="true">›</span>
       </button>
     </nav>

@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
+import { useLanguage } from '../../context/LanguageContext';
 import './Toast.css';
 
 const ICONS = { success: '✓', error: '✕', info: 'i' };
-const DEFAULT_TITLES = { success: 'Sucesso', error: 'Erro', info: 'Informação' };
 
 export default function Toast({ id, type = 'info', title, message, duration = 4000, onClose }) {
   const [paused, setPaused] = useState(false);
   const [leaving, setLeaving] = useState(false);
+  const { t } = useLanguage();
 
   
   useEffect(() => {
@@ -15,7 +16,6 @@ export default function Toast({ id, type = 'info', title, message, duration = 40
     return () => clearTimeout(timer);
   }, [paused, leaving, duration]);
 
- 
   useEffect(() => {
     if (!leaving) return undefined;
     const timer = setTimeout(() => onClose(id), 250);
@@ -32,13 +32,13 @@ export default function Toast({ id, type = 'info', title, message, duration = 40
     >
       <span className="toast__icon" aria-hidden="true">{ICONS[type]}</span>
       <div className="toast__body">
-        <p className="toast__title">{title || DEFAULT_TITLES[type]}</p>
+        <p className="toast__title">{title || t(`toast.${type}`)}</p>
         <p className="toast__message">{message}</p>
       </div>
       <button
         type="button"
         className="toast__close"
-        aria-label="Fechar notificação"
+        aria-label={t('toast.close')}
         onClick={() => setLeaving(true)}
       >
         ×

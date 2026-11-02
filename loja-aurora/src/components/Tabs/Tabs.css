@@ -8,7 +8,7 @@
 .tabs__list {
   display: flex;
   border-bottom: 1px solid var(--border);
-  overflow-x: auto;
+  overflow-x: auto; 
   scrollbar-width: none;
 }
 

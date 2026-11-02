@@ -11,7 +11,7 @@ export default function Dropdown({ label, options, selectedValue, onSelect, alig
 
   const selectedOption = options.find((option) => option.value === selectedValue);
 
-
+  
   useEffect(() => {
     if (!isOpen) return undefined;
     function handleClickOutside(event) {
@@ -25,7 +25,6 @@ export default function Dropdown({ label, options, selectedValue, onSelect, alig
     };
   }, [isOpen]);
 
-  
   useEffect(() => {
     if (isOpen) listRef.current?.focus();
   }, [isOpen]);
