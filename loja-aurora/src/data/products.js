@@ -35,6 +35,18 @@ const NAMES = {
   ],
 };
 
+
+const PHOTOS = {
+  electronics: [4887213, 2582938, 2272759, 3779780, 267394, 7172701, 914912],
+  books: [9572701, 1181271, 6424590, 256374, 2925316, 990432],
+  home: [2168382, 4876538, 7054730, 5824534, 10488435, 3737800],
+  sports: [1124466, 1342529, 4793328, 8809595, 2452345, 2652236],
+};
+
+
+const pexelsUrl = (id) =>
+  `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=600`;
+
 export const categories = Object.keys(NAMES);
 
 export const products = categories.flatMap((category, c) =>
@@ -42,7 +54,8 @@ export const products = categories.flatMap((category, c) =>
     id: `${c}-${i}`,
     names,
     category,
-
+    image: pexelsUrl(PHOTOS[category][i]),
+  
     price: Number((29.9 + ((c * 7 + i) * 37.3) % 450).toFixed(2)),
     rating: 3 + ((c + i) % 3) * 0.5 + 0.5,
   }))

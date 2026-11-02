@@ -7,6 +7,24 @@ import { categories, products } from '../data/products';
 
 const ITEMS_PER_PAGE = 6;
 
+
+function ProductImage({ src, name }) {
+  const [failed, setFailed] = useState(false);
+
+  if (failed) {
+    return <div className="product__thumb" aria-hidden="true">{name.charAt(0)}</div>;
+  }
+  return (
+    <img
+      className="product__thumb product__img"
+      src={src}
+      alt={name}
+      loading="lazy"
+      onError={() => setFailed(true)}
+    />
+  );
+}
+
 export default function Produtos() {
   const { showToast } = useToast();
   const { t, language } = useLanguage();
@@ -73,7 +91,7 @@ export default function Produtos() {
           return (
             <li key={product.id}>
               <article className="card product">
-                <div className="product__thumb" aria-hidden="true">{name.charAt(0)}</div>
+                <ProductImage src={product.image} name={name} />
                 <span className="tag">{t(`categories.${product.category}`)}</span>
                 <h2 className="product__name">{name}</h2>
                 <p className="product__rating" aria-label={t('products.rating', { r: product.rating })}>

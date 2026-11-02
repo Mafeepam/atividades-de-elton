@@ -3,7 +3,6 @@ import ProgressBar from '../components/ProgressBar/ProgressBar';
 import { useLanguage } from '../context/LanguageContext';
 import { useToast } from '../context/ToastContext';
 
-
 export default function Upload() {
   const { showToast } = useToast();
   const { t } = useLanguage();
@@ -11,7 +10,6 @@ export default function Upload() {
   const [progress, setProgress] = useState(0);
   const [status, setStatus] = useState('idle'); // idle | uploading | done | error
   const [simulateError, setSimulateError] = useState(false);
-
 
   useEffect(() => {
     if (status !== 'uploading') return undefined;
@@ -21,7 +19,7 @@ export default function Upload() {
     return () => clearInterval(interval); 
   }, [status]);
 
-
+  
   useEffect(() => {
     if (status !== 'uploading') return;
     if (simulateError && progress >= 60) {

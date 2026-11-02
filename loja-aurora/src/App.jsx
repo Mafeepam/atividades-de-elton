@@ -15,7 +15,6 @@ export default function App() {
   const { showToast } = useToast();
   const { language, setLanguage, t } = useLanguage();
 
-
   function handleLanguageChange(option) {
     setLanguage(option.value);
     showToast({

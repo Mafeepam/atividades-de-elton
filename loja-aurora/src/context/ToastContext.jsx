@@ -12,7 +12,7 @@ export function ToastProvider({ children }) {
     setToasts((current) => current.filter((toast) => toast.id !== id));
   }, []);
 
- 
+
   const showToast = useCallback(({ type = 'info', title, message, duration = 4000 }) => {
     const id = nextId++;
     setToasts((current) => [...current, { id, type, title, message, duration }]);

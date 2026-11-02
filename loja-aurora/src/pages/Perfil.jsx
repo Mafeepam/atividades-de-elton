@@ -16,7 +16,6 @@ export default function Perfil() {
   const [form, setForm] = useState({ nome: 'Ana Souza', email: 'ana.souza@exemplo.com', cidade: 'Salvador' });
   const [notifications, setNotifications] = useState(true);
 
-  // Quanto do perfil está preenchido (para a barra de progresso)
   const filled = Object.values(form).filter((value) => value.trim() !== '').length;
   const completion = (filled / Object.keys(form).length) * 100;
 
