@@ -116,7 +116,7 @@
           <button type="button" data-bs-target="#carrosselDestaques" data-bs-slide-to="1"
                   aria-label="Slide 2: Costa do Dendê"></button>
           <button type="button" data-bs-target="#carrosselDestaques" data-bs-slide-to="2"
-                  aria-label="Slide 3: Serra do Sincorá"></button>
+                  aria-label="Slide 3: Grutas e poços azuis"></button>
         </div>
 
         <div class="carousel-inner">
@@ -129,9 +129,9 @@
           -->
           <div class="carousel-item active">
             <div class="ratio ratio-21x9 bg-success-subtle">
-              <img src="img/chapada-diamantina.svg"
+              <img src="img/chapada-diamantina.jpg"
                    class="w-100 h-100 object-fit-cover"
-                   alt="Vale cercado por serras na Chapada Diamantina ao amanhecer">
+                   alt="Vista aérea dos morros de topo plano da Chapada Diamantina, com vegetação verde e céu azul">
             </div>
             <div class="carousel-caption bg-dark bg-opacity-50 rounded-3 p-3 p-md-4">
               <span class="badge text-bg-success mb-2">Destaque</span>
@@ -144,9 +144,9 @@
 
           <div class="carousel-item">
             <div class="ratio ratio-21x9 bg-primary-subtle">
-              <img src="img/costa-do-dende.svg"
+              <img src="img/costa-do-dende.jpg"
                    class="w-100 h-100 object-fit-cover"
-                   alt="Praia deserta com coqueiros na Costa do Dendê">
+                   alt="Falésia coberta de mata debruçada sobre o mar esverdeado na Costa do Dendê">
             </div>
             <div class="carousel-caption bg-dark bg-opacity-50 rounded-3 p-3 p-md-4">
               <span class="badge text-bg-primary mb-2">Litoral</span>
@@ -159,15 +159,15 @@
 
           <div class="carousel-item">
             <div class="ratio ratio-21x9 bg-warning-subtle">
-              <img src="img/serra-do-sincora.svg"
+              <img src="img/gruta-aguas-claras.jpg"
                    class="w-100 h-100 object-fit-cover"
-                   alt="Trilha em meio às montanhas da Serra do Sincorá">
+                   alt="Duas pessoas em stand-up paddle sobre a água turquesa de uma gruta aberta">
             </div>
             <div class="carousel-caption bg-dark bg-opacity-50 rounded-3 p-3 p-md-4">
-              <span class="badge text-bg-warning mb-2">Montanha</span>
-              <h2 class="h4 fw-bold">Serra do Sincorá</h2>
+              <span class="badge text-bg-warning mb-2">Águas claras</span>
+              <h2 class="h4 fw-bold">Grutas e poços azuis</h2>
               <p class="mb-0 small d-none d-sm-block">
-                Travessia clássica com pernoite em acampamento guiado.
+                Flutuação e stand-up paddle em águas transparentes.
               </p>
             </div>
           </div>
@@ -331,7 +331,12 @@
       </div>
     </section>
 
-  
+    <!-- ============================================================
+         COMPONENTE 5: FORMULÁRIO
+         - 5 campos com <label> associado por for/id
+         - validação HTML5 (required, type="email", pattern)
+         - classe needs-validation + JS nativo para feedback do Bootstrap
+         ============================================================ -->
     <section id="contato" class="py-5">
       <div class="container">
         <div class="row justify-content-center">
@@ -396,6 +401,7 @@
                 <button type="reset" class="btn btn-outline-secondary">Limpar</button>
               </div>
 
+              <!-- Alerta exibido após envio válido -->
               <div class="col-12">
                 <div class="alert alert-success d-none" id="alertaEnvio" role="alert">
                   Mensagem enviada com sucesso! Responderemos em até 24 horas.
@@ -411,6 +417,11 @@
 
   </main>
 
+  <!-- ============================================================
+       COMPONENTE 6: MODAL
+       - acionado por data-bs-toggle="modal" na navbar e no rodapé
+       - overlay semi-transparente e fechar ao clicar fora são nativos
+       ============================================================ -->
   <div class="modal fade" id="modalReserva" tabindex="-1"
        aria-labelledby="tituloModalReserva" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -445,6 +456,9 @@
     </div>
   </div>
 
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
   <footer class="bg-dark text-light py-4 mt-auto">
     <div class="container">
       <div class="row gy-3 align-items-center">
@@ -467,11 +481,13 @@
     </div>
   </footer>
 
+  <!-- Bootstrap 5 via CDN (bundle com Popper: necessário para navbar, carrossel e modal) -->
   <script
     src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"></script>
 
+  <!-- JavaScript nativo: ativa o feedback visual de validação do Bootstrap -->
   <script>
     (function () {
       'use strict';
