@@ -1,10 +1,6 @@
 import { useLanguage } from '../../context/LanguageContext';
 import './Pagination.css';
 
-/**
- * Gera a lista de páginas a exibir, com "…" quando há muitas.
- * Ex.: totalPages=10, current=5 → [1, '…', 4, 5, 6, '…', 10]
- */
 function getPageItems(currentPage, totalPages) {
   if (totalPages <= 7) {
     return Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -20,7 +16,7 @@ function getPageItems(currentPage, totalPages) {
 }
 
 export default function Pagination({ totalPages, currentPage, onPageChange }) {
-  const { t } = useLanguage(); // hooks sempre antes de qualquer return
+  const { t } = useLanguage(); 
   if (totalPages <= 1) return null;
 
   const isFirst = currentPage === 1;
