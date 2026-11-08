@@ -1,3 +1,18 @@
+<!--
+  COMPONENTE 5 — Menu Suspenso (Dropdown Menu)
+
+  Uso:
+    <MenuSuspensoComponent rotulo="Categoria" :opcoes="categorias"
+                           :selecionada="categoriaSelecionada"
+                           @selecionar="aplicarFiltro" />
+
+  props:    rotulo, opcoes (array de { rotulo, valor }), selecionada
+  data:     aberto — visibilidade da lista
+  emits:    'selecionar' com a opção escolhida
+  hooks:    mounted / beforeUnmount — registram e removem os listeners
+            de "clicar fora" e tecla ESC no document
+-->
+<template>
   <div class="dropdown" :class="{ 'dropdown--aberto': aberto }">
     <button
       type="button"
@@ -51,11 +66,13 @@ export default {
     }
   },
 
+  /** Lifecycle hook: registra os listeners globais ao montar. */
   mounted() {
     document.addEventListener('click', this.fecharAoClicarFora);
     document.addEventListener('keydown', this.fecharComEsc);
   },
 
+  /** Lifecycle hook: remove os listeners para não vazar memória. */
   beforeUnmount() {
     document.removeEventListener('click', this.fecharAoClicarFora);
     document.removeEventListener('keydown', this.fecharComEsc);

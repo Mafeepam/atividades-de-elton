@@ -1,3 +1,9 @@
+/**
+ * uploadService.js — Simula o envio de um arquivo para alimentar a Barra de Progresso.
+ *
+ * Mantém a lógica de progresso fora do controlador: quem usa o serviço só
+ * informa um callback de atualização e outro de conclusão.
+ */
 (function () {
   'use strict';
 
@@ -29,6 +35,7 @@
       servico.emAndamento = true;
 
       execucaoAtual = $interval(function () {
+        // Incremento irregular para parecer um envio real.
         progresso = Math.min(100, progresso + Math.round(4 + Math.random() * 9));
         aoProgredir(progresso);
 
@@ -41,6 +48,7 @@
       }, 180);
     }
 
+    /** Interrompe a simulação em andamento. */
     function cancelar() {
       if (execucaoAtual) {
         $interval.cancel(execucaoAtual);

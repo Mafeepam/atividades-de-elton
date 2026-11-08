@@ -1,7 +1,14 @@
+<!--
+  App.vue — Componente raiz da aplicação.
 
+  Orquestra os 6 componentes visuais: fornece os dados via props e
+  responde aos eventos que eles emitem ($emit). Nenhuma regra de
+  negócio vive aqui — ela está em src/services/.
+-->
 <template>
   <div class="aplicacao">
 
+    <!-- ============================ CABEÇALHO ============================ -->
     <header class="cabecalho">
       <div class="container cabecalho__interno">
         <div class="marca">
@@ -17,6 +24,7 @@
 
     <main class="container conteudo">
 
+      <!-- ============ COMPONENTE 5: MENU SUSPENSO + CATÁLOGO ============ -->
       <section class="secao">
         <div class="secao__cabecalho">
           <div>
@@ -61,6 +69,7 @@
           </article>
         </div>
 
+        <!-- ================= COMPONENTE 2: PAGINAÇÃO ================= -->
         <PaginacaoComponent
           :pagina-atual="pagina"
           :total-paginas="totalPaginas"
@@ -69,7 +78,8 @@
       </section>
 
       <div class="colunas">
-                 <section class="secao">
+        <!-- ================= COMPONENTE 1: ACORDEÃO ================= -->
+        <section class="secao">
           <h2 class="secao__titulo">Perguntas frequentes</h2>
           <p class="secao__subtitulo">Apenas uma resposta fica aberta por vez.</p>
 
@@ -80,6 +90,7 @@
           />
         </section>
 
+        <!-- ================= COMPONENTE 4: ABAS ================= -->
         <section class="secao">
           <h2 class="secao__titulo">Trilha Full Stack</h2>
           <p class="secao__subtitulo">Detalhes organizados em painéis.</p>
@@ -89,6 +100,7 @@
       </div>
 
       <div class="colunas">
+        <!-- ============= COMPONENTE 3: BARRA DE PROGRESSO ============= -->
         <section class="secao">
           <h2 class="secao__titulo">Envio de material</h2>
           <p class="secao__subtitulo">
@@ -121,6 +133,7 @@
             </button>
           </div>
 
+          <!-- O mesmo componente reaproveitado com outros dados -->
           <div class="bloco-separado">
             <p class="secao__subtitulo">Progresso do aluno em cada módulo:</p>
 
@@ -135,6 +148,7 @@
           </div>
         </section>
 
+        <!-- ============= COMPONENTE 6: NOTIFICAÇÃO TOAST ============= -->
         <section class="secao">
           <h2 class="secao__titulo">Inscrição na newsletter</h2>
           <p class="secao__subtitulo">Cada ação devolve uma notificação Toast.</p>
@@ -142,6 +156,7 @@
           <form class="formulario" novalidate @submit.prevent="enviarInscricao">
             <label class="campo">
               <span class="campo__rotulo">Nome completo</span>
+              <!-- v-model: two-way data binding -->
               <input
                 v-model="inscricao.nome"
                 type="text"
@@ -165,6 +180,7 @@
               <span>Quero receber novidades sobre novas turmas</span>
             </label>
 
+            <!-- computed property reagindo ao v-model -->
             <p v-if="inscricao.nome || inscricao.email" class="previa">
               Pré-visualização: {{ resumoInscricao }}
             </p>
@@ -192,6 +208,7 @@
       </div>
     </footer>
 
+    <!-- Pilha de notificações, fora do fluxo da página -->
     <NotificacaoToast posicao="superior-direita" />
   </div>
 </template>
@@ -228,15 +245,18 @@ export default {
 
   data() {
     return {
+      // Catálogo
       pagina: 1,
       categorias: listarCategorias(),
       categoriaSelecionada: null,
       itensPorPagina: ITENS_POR_PAGINA,
 
+      // Upload
       progressoUpload: 0,
       nomeArquivo: 'plano-de-estudos.pdf',
       cancelarSimulacao: null,
 
+      // O mesmo componente de progresso com outro conjunto de dados
       modulosTrilha: [
         { nome: 'Bloco 1 — Fundamentos', concluido: 100 },
         { nome: 'Bloco 2 — Front-end',   concluido: 72 },
@@ -244,12 +264,14 @@ export default {
         { nome: 'Bloco 4 — Engenharia',  concluido: 0 }
       ],
 
+      // Formulário (two-way binding com v-model)
       inscricao: {
         nome: '',
         email: '',
         receberNovidades: true
       },
 
+      // Conteúdo do acordeão
       perguntasFrequentes: [
         {
           titulo: 'Como funciona o acesso às aulas?',
@@ -285,6 +307,7 @@ export default {
         }
       ],
 
+      // Conteúdo das abas
       abasTrilha: [
         {
           titulo: 'Visão geral',
@@ -337,10 +360,12 @@ export default {
   },
 
   computed: {
+    /** Categoria ativa em formato simples (ou null). */
     filtroAtual() {
       return this.categoriaSelecionada ? this.categoriaSelecionada.valor : null;
     },
 
+    /** Recorte de cursos da página atual — recalculado automaticamente. */
     cursos() {
       return buscarPagina(this.pagina, this.filtroAtual);
     },
@@ -353,6 +378,7 @@ export default {
       return totalDe(this.filtroAtual);
     },
 
+    /** Prova visual do two-way binding do formulário. */
     resumoInscricao() {
       const nome = this.inscricao.nome || 'sem nome';
       const email = this.inscricao.email || 'sem e-mail';
@@ -364,20 +390,25 @@ export default {
     }
   },
 
+  /** Lifecycle hook: a aplicação acabou de ser montada no DOM. */
   mounted() {
     toastService.informacao('Bem-vindo ao portal EduTech — versão Vue.js.', 3500);
   },
 
+  /** Lifecycle hook: evita deixar o intervalo rodando ao destruir. */
   beforeUnmount() {
     this.cancelarUpload();
   },
 
   methods: {
+    /* ---------------- Catálogo ---------------- */
 
+    /** Recebido do componente <PaginacaoComponent> via $emit. */
     irParaPagina(pagina) {
       this.pagina = pagina;
     },
 
+    /** Recebido do componente <MenuSuspensoComponent> via $emit. */
     aplicarFiltroCategoria(opcao) {
       this.categoriaSelecionada = opcao;
       this.pagina = 1;
@@ -389,6 +420,7 @@ export default {
       );
     },
 
+    /* ---------------- Upload ---------------- */
 
     iniciarUpload() {
       if (this.uploadAtivo) return;
@@ -408,10 +440,12 @@ export default {
       toastService.aviso(`Envio interrompido em ${this.progressoUpload}%.`);
     },
 
+    /** Recebido do componente <BarraProgressoComponent> via $emit. */
     aoConcluirUpload() {
       toastService.sucesso(`Arquivo "${this.nomeArquivo}" enviado com sucesso.`);
     },
 
+    /* ---------------- Formulário ---------------- */
 
     enviarInscricao() {
       if (!this.inscricao.nome || !this.inscricao.email) {
@@ -427,12 +461,16 @@ export default {
       this.inscricao = { nome: '', email: '', receberNovidades: true };
     },
 
+    /* ---------------- Eventos dos componentes ---------------- */
+
+    /** Recebido do componente <AcordeaoComponent> via $emit. */
     registrarAberturaFaq({ item, aberto }) {
       if (aberto) {
         toastService.informacao(`Você abriu: "${item.titulo}"`, 2500);
       }
     },
 
+    /** Recebido do componente <AbasComponent> via $emit. */
     aoTrocarAba({ aba }) {
       toastService.informacao(`Aba selecionada: ${aba.titulo}`, 2000);
     },
@@ -447,10 +485,16 @@ export default {
       toastService[tipo](mensagens[tipo]);
     },
 
+    /* ---------------- Formatação ----------------
+       O Vue 3 removeu os filtros do Vue 2; a formatação passa a ser
+       feita por métodos ou computed properties.                     */
+
+    /** 259.9 -> "R$ 259,90" */
     formatarMoeda(valor) {
       return `R$ ${Number(valor).toFixed(2).replace('.', ',')}`;
     },
 
+    /** 3310 -> "3.310" */
     formatarMilhar(valor) {
       return String(valor).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     }

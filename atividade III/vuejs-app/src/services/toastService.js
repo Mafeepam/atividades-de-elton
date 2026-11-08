@@ -1,3 +1,10 @@
+/**
+ * toastService.js — Serviço global de notificações.
+ *
+ * Usa `reactive` do Vue para expor uma fila observável. Qualquer componente
+ * pode importar este módulo e chamar toastService.sucesso('...'); o
+ * componente <NotificacaoToast> apenas renderiza a fila.
+ */
 import { reactive } from 'vue';
 
 const estado = reactive({
@@ -27,6 +34,7 @@ function exibir(mensagem, tipo = 'informacao', duracao = DURACAO_PADRAO) {
   return notificacao.id;
 }
 
+/** Remove uma notificação específica. */
 function fechar(id) {
   const indice = estado.notificacoes.findIndex((n) => n.id === id);
   if (indice === -1) return;
@@ -35,6 +43,7 @@ function fechar(id) {
   estado.notificacoes.splice(indice, 1);
 }
 
+/** Esvazia a fila inteira. */
 function limpar() {
   [...estado.notificacoes].forEach((n) => fechar(n.id));
 }

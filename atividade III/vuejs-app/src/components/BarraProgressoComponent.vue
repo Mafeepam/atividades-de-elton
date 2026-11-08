@@ -1,3 +1,15 @@
+<!--
+  COMPONENTE 3 — Barra de Progresso (Progress Bar)
+
+  Uso:
+    <BarraProgressoComponent :progresso="progressoUpload"
+                             rotulo="Enviando arquivo.pdf"
+                             :mostrar-percentual="true" />
+
+  props:    progresso (0–100), rotulo, mostrarPercentual
+  computed: valorSeguro (limita entre 0 e 100), classeDaFaixa (cor por estágio)
+  emits:    'concluido' uma única vez, quando o progresso chega a 100
+-->
 <template>
   <div class="progresso">
     <div class="progresso__legenda">
@@ -34,12 +46,14 @@ export default {
   emits: ['concluido'],
 
   computed: {
+    /** Garante um valor exibível entre 0 e 100. */
     valorSeguro() {
       const valor = Number(this.progresso);
       if (Number.isNaN(valor)) return 0;
       return Math.max(0, Math.min(100, Math.round(valor)));
     },
 
+    /** Cor da barra conforme o estágio da tarefa. */
     classeDaFaixa() {
       if (this.valorSeguro >= 100) return 'progresso__preenchimento--concluido';
       if (this.valorSeguro >= 60) return 'progresso__preenchimento--avancado';
@@ -48,6 +62,7 @@ export default {
   },
 
   watch: {
+    /** Avisa o componente pai assim que a barra completa. */
     valorSeguro(novo, antigo) {
       if (novo === 100 && antigo < 100) {
         this.$emit('concluido');

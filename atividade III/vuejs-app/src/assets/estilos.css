@@ -1,3 +1,12 @@
+/* =============================================================================
+   EduTech (Vue.js) — Estilos globais
+   Os estilos de cada um dos 6 componentes ficam no próprio .vue, em blocos
+   <style scoped>. Este arquivo cuida apenas do layout da página e dos
+   elementos compartilhados (cabeçalho, seções, formulário, botões).
+   Abordagem mobile first.
+   ========================================================================== */
+
+/* ----------------------------- Variáveis ---------------------------------- */
 :root {
   --cor-fundo:          #f2f7f5;
   --cor-superficie:     #ffffff;
@@ -17,6 +26,7 @@
   --transicao:          180ms ease;
 }
 
+/* ----------------------------- Reset leve --------------------------------- */
 *, *::before, *::after { box-sizing: border-box; }
 
 html { -webkit-text-size-adjust: 100%; }
@@ -44,6 +54,7 @@ code {
   border-radius: 4px;
 }
 
+/* ------------------------------ Estrutura --------------------------------- */
 .container {
   width: 100%;
   max-width: 1180px;
@@ -58,10 +69,13 @@ code {
   gap: 20px;
 }
 
+/* Itens de grid não encolhem abaixo do próprio conteúdo por padrão;
+   zerar o min-width evita rolagem horizontal no celular. */
 .conteudo > *,
 .colunas > *,
 .grade-cursos > * { min-width: 0; }
 
+/* ------------------------------ Cabeçalho --------------------------------- */
 .cabecalho {
   background: linear-gradient(135deg, #122620 0%, #1f4a3c 100%);
   color: #fff;
@@ -101,6 +115,7 @@ code {
   border: 1px solid rgba(255, 255, 255, .18);
 }
 
+/* -------------------------------- Seções ---------------------------------- */
 .secao {
   background: var(--cor-superficie);
   border: 1px solid var(--cor-borda);
@@ -128,6 +143,7 @@ code {
 
 .colunas { display: grid; gap: 20px; }
 
+/* ---------------------------- Grade de cursos ----------------------------- */
 .grade-cursos {
   display: grid;
   gap: 14px;
@@ -181,6 +197,7 @@ code {
   color: var(--cor-primaria-esc);
 }
 
+/* ------------------------- Formulário e botões ---------------------------- */
 .formulario { display: grid; gap: 14px; }
 
 .campo { display: grid; gap: 6px; }
@@ -267,6 +284,7 @@ code {
   color: var(--cor-texto-suave);
 }
 
+/* -------------------------------- Rodapé ---------------------------------- */
 .rodape {
   background: #122620;
   color: rgba(255, 255, 255, .7);
@@ -275,7 +293,11 @@ code {
   text-align: center;
 }
 
+/* =============================================================================
+   RESPONSIVIDADE
+   ========================================================================== */
 
+/* ---- Tablets (>= 640px) ---- */
 @media (min-width: 640px) {
   .container { padding: 0 24px; }
 
@@ -311,10 +333,12 @@ code {
   .marca__nome { font-size: 1.5rem; }
 }
 
+/* ---- Telas largas (>= 1400px) ---- */
 @media (min-width: 1400px) {
   .container { max-width: 1280px; }
 }
 
+/* ---- Respeita quem prefere menos movimento ---- */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: .01ms !important;

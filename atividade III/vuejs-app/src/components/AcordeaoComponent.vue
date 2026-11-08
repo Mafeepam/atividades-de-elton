@@ -1,3 +1,15 @@
+<!--
+  COMPONENTE 1 — Acordeão (Accordion)
+
+  Uso:
+    <AcordeaoComponent :itens="perguntas" :apenas-um-aberto="true"
+                       @alternar="aoAlternarFaq" />
+
+  props:   itens (array de { titulo, conteudo }), apenasUmAberto (boolean)
+  data:    indiceAberto / abertosMultiplos — estado local de qual item está aberto
+  emits:   'alternar' com { item, indice, aberto }
+  hook:    mounted — abre o primeiro item quando `abrirPrimeiro` é verdadeiro
+-->
 <template>
   <div class="acordeao">
     <div
@@ -16,6 +28,7 @@
         <span class="acordeao__icone" aria-hidden="true">+</span>
       </button>
 
+      <!-- <transition> do Vue anima a altura do painel ao abrir/fechar -->
       <transition name="expandir">
         <div v-show="estaAberto(indice)" class="acordeao__painel">
           <div class="acordeao__conteudo">{{ item.conteudo }}</div>
@@ -30,15 +43,18 @@ export default {
   name: 'AcordeaoComponent',
 
   props: {
+    /** Lista de { titulo, conteudo } exibida pelo acordeão. */
     itens: {
       type: Array,
       required: true,
       validator: (lista) => lista.every((i) => 'titulo' in i && 'conteudo' in i)
     },
+    /** Quando verdadeiro, abrir um item fecha o anterior. */
     apenasUmAberto: {
       type: Boolean,
       default: true
     },
+    /** Abre o primeiro item automaticamente ao montar o componente. */
     abrirPrimeiro: {
       type: Boolean,
       default: false
@@ -49,11 +65,12 @@ export default {
 
   data() {
     return {
-      indiceAberto: -1,      
-      abertosMultiplos: {}   
+      indiceAberto: -1,      // usado no modo exclusivo
+      abertosMultiplos: {}   // usado quando apenasUmAberto = false
     };
   },
 
+  /** Lifecycle hook: roda depois do componente ser inserido no DOM. */
   mounted() {
     if (this.abrirPrimeiro && this.itens.length) {
       this.alternar(0);
@@ -61,10 +78,12 @@ export default {
   },
 
   methods: {
+    /** Abre/fecha o item e avisa o componente pai via $emit. */
     alternar(indice) {
       if (this.apenasUmAberto) {
         this.indiceAberto = this.indiceAberto === indice ? -1 : indice;
       } else {
+        // Reatribuição garante a reatividade do objeto no Vue 3.
         this.abertosMultiplos = {
           ...this.abertosMultiplos,
           [indice]: !this.abertosMultiplos[indice]
@@ -141,6 +160,7 @@ export default {
   color: var(--cor-texto-suave);
 }
 
+/* Transição suave de expansão/colapso */
 .expandir-enter-active,
 .expandir-leave-active {
   transition: max-height 280ms ease, opacity 200ms ease;

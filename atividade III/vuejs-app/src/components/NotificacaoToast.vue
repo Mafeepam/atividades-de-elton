@@ -1,3 +1,14 @@
+<!--
+  COMPONENTE 6 — Notificação Toast (Toast Notification)
+
+  Uso (uma única vez, normalmente no App.vue):
+    <NotificacaoToast posicao="superior-direita" />
+
+  props:    posicao — canto da tela onde a pilha aparece
+  computed: notificacoes — lê a fila reativa mantida pelo toastService
+  O componente não decide quando notificar: qualquer parte da aplicação
+  chama toastService.sucesso('...') e a mensagem aparece aqui.
+-->
 <template>
   <div
     class="toasts"
@@ -56,6 +67,7 @@ export default {
   },
 
   computed: {
+    /** Fila reativa vinda do serviço global. */
     notificacoes() {
       return toastService.estado.notificacoes;
     }
@@ -141,6 +153,7 @@ export default {
 .toast--informacao { border-left-color: var(--cor-info); }
 .toast--informacao .toast__icone { background: var(--cor-info); }
 
+/* Animação de entrada/saída da pilha */
 .toast-enter-active, .toast-leave-active { transition: all 240ms ease; }
 .toast-enter-from  { opacity: 0; transform: translateX(24px); }
 .toast-leave-to    { opacity: 0; transform: translateX(24px); }

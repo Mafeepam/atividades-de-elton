@@ -1,3 +1,18 @@
+/**
+ * paginacao.directive.js — COMPONENTE 2: Paginação (Pagination)
+ *
+ * Uso:
+ *   <paginacao pagina-atual="vm.pagina"
+ *              total-paginas="vm.totalPaginas"
+ *              ao-mudar-pagina="vm.irParaPagina(pagina)"></paginacao>
+ *
+ * Bindings (escopo isolado):
+ *   paginaAtual    = (two-way) página corrente, começando em 1
+ *   totalPaginas   = (two-way) quantidade total de páginas
+ *   aoMudarPagina  & (callback) recebe o parâmetro { pagina }
+ *
+ * Os botões "anterior" e "próxima" ficam desabilitados nos extremos.
+ */
 (function () {
   'use strict';
 
@@ -50,6 +65,7 @@
     vm.naPrimeira = naPrimeira;
     vm.naUltima = naUltima;
 
+    /** Gera o vetor [1..totalPaginas] consumido pelo ng-repeat. */
     function paginas() {
       var lista = [];
       for (var i = 1; i <= (vm.totalPaginas || 1); i++) {
@@ -66,6 +82,7 @@
       return vm.paginaAtual >= vm.totalPaginas;
     }
 
+    /** Notifica o componente pai da troca de página. */
     function selecionar(pagina) {
       if (pagina === vm.paginaAtual || pagina < 1 || pagina > vm.totalPaginas) {
         return;

@@ -209,5 +209,78 @@
   <script src="js/directives/notificacaoToast.directive.js"></script>
 
   <script src="js/controllers/mainController.js"></script>
+
+  <script>
+    (function () {
+      'use strict';
+
+      var ESPERADO = [
+        ['eduTech.core',       'catalogoFactory',   'js/services/catalogoFactory.js'],
+        ['eduTech.core',       'toastService',      'js/services/toastService.js'],
+        ['eduTech.core',       'uploadService',     'js/services/uploadService.js'],
+        ['eduTech.core',       'moedaBrasileira',   'js/filters/filtros.js'],
+        ['eduTech.components', 'acordeao',          'js/directives/acordeao.directive.js'],
+        ['eduTech.components', 'paginacao',         'js/directives/paginacao.directive.js'],
+        ['eduTech.components', 'barraProgresso',    'js/directives/barraProgresso.directive.js'],
+        ['eduTech.components', 'abas',              'js/directives/abas.directive.js'],
+        ['eduTech.components', 'menuSuspenso',      'js/directives/menuSuspenso.directive.js'],
+        ['eduTech.components', 'notificacaoToast',  'js/directives/notificacaoToast.directive.js'],
+        ['eduTechApp',         'MainController',    'js/controllers/mainController.js']
+      ];
+
+      function registrados(nomeModulo) {
+        try {
+          return angular.module(nomeModulo)._invokeQueue.map(function (item) {
+            return item[2] && item[2][0];
+          });
+        } catch (e) {
+          return null; 
+        }
+      }
+
+      function avisar(titulo, linhas) {
+        var caixa = document.createElement('div');
+        caixa.setAttribute('style', [
+          'position:fixed', 'inset:0', 'z-index:9999', 'overflow:auto',
+          'background:#1b2238', 'color:#fff', 'padding:32px',
+          'font:14px/1.6 Consolas,monospace'
+        ].join(';'));
+        caixa.innerHTML =
+          '<h2 style="font:700 18px sans-serif;margin:0 0 12px">' + titulo + '</h2>' +
+          '<p style="font-family:sans-serif;margin:0 0 16px;color:#aab">' +
+          'A página não pôde ser inicializada. Arquivos que não chegaram ao navegador:</p>' +
+          '<ul style="margin:0 0 20px;padding-left:20px;color:#ff9b9b">' + linhas + '</ul>' +
+          '<p style="font-family:sans-serif;margin:0;color:#aab">' +
+          'Confira se a pasta foi extraída por inteiro e abra o DevTools (F12) na aba ' +
+          '<strong>Network</strong> para ver as requisições com erro 404.</p>';
+        document.body.appendChild(caixa);
+      }
+
+      window.addEventListener('load', function () {
+        setTimeout(function () {
+          if (document.body.innerText.indexOf('{{') === -1) { return; }
+
+          if (typeof window.angular === 'undefined') {
+            return avisar('AngularJS não carregou',
+              '<li>vendor/angular.min.js</li>');
+          }
+
+          var faltando = [];
+          ESPERADO.forEach(function (item) {
+            var lista = registrados(item[0]);
+            if (lista === null || lista.indexOf(item[1]) === -1) {
+              if (faltando.indexOf(item[2]) === -1) { faltando.push(item[2]); }
+            }
+          });
+
+          if (faltando.length) {
+            avisar('Faltam arquivos JavaScript', faltando.map(function (f) {
+              return '<li>' + f + '</li>';
+            }).join(''));
+          }
+        }, 300);
+      });
+    })();
+  </script>
 </body>
 </html>

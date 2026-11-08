@@ -1,3 +1,9 @@
+/**
+ * catalogoService.js — Camada de dados do catálogo de cursos.
+ *
+ * Mantém a base fictícia e as regras de filtro/paginação fora dos
+ * componentes, que apenas consomem o resultado pronto.
+ */
 
 const cursos = [
   { id: 1,  nome: 'Lógica de Programação',         categoria: 'Fundamentos', preco: 149.9, cargaHoraria: 40, nota: 4.8, matriculas: 1280 },
@@ -22,6 +28,7 @@ const cursos = [
 
 export const ITENS_POR_PAGINA = 4;
 
+/** Categorias disponíveis, com "Todas" à frente. */
 export function listarCategorias() {
   const unicas = [...new Set(cursos.map((c) => c.categoria))].sort();
 
@@ -31,24 +38,32 @@ export function listarCategorias() {
   ];
 }
 
+/** Aplica o filtro de categoria (null = sem filtro). */
 function filtrarPorCategoria(categoria) {
   return categoria ? cursos.filter((c) => c.categoria === categoria) : [...cursos];
 }
 
+/** Quantidade de cursos após o filtro. */
 export function totalDe(categoria) {
   return filtrarPorCategoria(categoria).length;
 }
 
+/** Número total de páginas (mínimo 1). */
 export function contarPaginas(categoria) {
   return Math.max(1, Math.ceil(totalDe(categoria) / ITENS_POR_PAGINA));
 }
 
+/** Recorte de cursos da página pedida (a primeira página é a 1). */
 export function buscarPagina(pagina, categoria) {
   const lista = filtrarPorCategoria(categoria);
   const inicio = (pagina - 1) * ITENS_POR_PAGINA;
   return lista.slice(inicio, inicio + ITENS_POR_PAGINA);
 }
 
+/**
+ * Simula o envio de um arquivo, chamando `aoProgredir` até chegar a 100%.
+ * Devolve uma função que cancela a simulação.
+ */
 export function simularUpload(aoProgredir, aoConcluir) {
   let progresso = 0;
 

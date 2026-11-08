@@ -1,3 +1,10 @@
+/* =============================================================================
+   EduTech — Folha de estilo única da aplicação AngularJS
+   Abordagem mobile first: o layout base atende smartphones e os blocos
+   @media ampliam a grade para tablets (>= 640px) e desktops (>= 1024px).
+   ========================================================================== */
+
+/* ----------------------------- Variáveis ---------------------------------- */
 :root {
   --cor-fundo:        #f4f6fb;
   --cor-superficie:   #ffffff;
@@ -17,6 +24,7 @@
   --transicao:        180ms ease;
 }
 
+/* ----------------------------- Reset leve --------------------------------- */
 *, *::before, *::after { box-sizing: border-box; }
 
 html { -webkit-text-size-adjust: 100%; }
@@ -44,8 +52,10 @@ code {
   border-radius: 4px;
 }
 
+/* Evita o "flash" do conteúdo antes do AngularJS compilar a página */
 [ng\:cloak], [ng-cloak], .ng-cloak { display: none !important; }
 
+/* ------------------------------ Estrutura --------------------------------- */
 .container {
   width: 100%;
   max-width: 1180px;
@@ -60,10 +70,13 @@ code {
   gap: 20px;
 }
 
+/* Itens de grid têm min-width:auto por padrão e não encolhem abaixo do
+   próprio conteúdo. Zerar essa medida evita rolagem horizontal no celular. */
 .conteudo > *,
 .colunas > *,
 .grade-cursos > * { min-width: 0; }
 
+/* ------------------------------ Cabeçalho --------------------------------- */
 .cabecalho {
   background: linear-gradient(135deg, #1b2238 0%, #2f3a66 100%);
   color: #fff;
@@ -106,6 +119,7 @@ code {
   border: 1px solid rgba(255, 255, 255, .18);
 }
 
+/* -------------------------------- Seções ---------------------------------- */
 .secao {
   background: var(--cor-superficie);
   border: 1px solid var(--cor-borda);
@@ -131,8 +145,10 @@ code {
 
 .secao__titulo + .secao__subtitulo { margin-bottom: 16px; }
 
+/* Duas colunas a partir do desktop */
 .colunas { display: grid; gap: 20px; }
 
+/* ---------------------------- Grade de cursos ----------------------------- */
 .grade-cursos {
   display: grid;
   gap: 14px;
@@ -195,6 +211,9 @@ code {
   color: var(--cor-primaria-esc);
 }
 
+/* =============================================================================
+   COMPONENTE 1 — Acordeão
+   ========================================================================== */
 .acordeao {
   border: 1px solid var(--cor-borda);
   border-radius: var(--raio-pequeno);
@@ -240,6 +259,7 @@ code {
   color: #fff;
 }
 
+/* Transição suave: anima max-height em vez de display */
 .acordeao__painel {
   max-height: 0;
   overflow: hidden;
@@ -254,6 +274,9 @@ code {
   color: var(--cor-texto-suave);
 }
 
+/* =============================================================================
+   COMPONENTE 2 — Paginação
+   ========================================================================== */
 .paginacao {
   display: flex;
   flex-wrap: wrap;
@@ -293,7 +316,7 @@ code {
   cursor: not-allowed;
 }
 
-.paginacao__texto { display: none; }  
+.paginacao__texto { display: none; }   /* no celular ficam só as setas */
 
 .paginacao__indicador {
   margin-left: auto;
@@ -301,6 +324,9 @@ code {
   color: var(--cor-texto-suave);
 }
 
+/* =============================================================================
+   COMPONENTE 3 — Barra de progresso
+   ========================================================================== */
 .progresso { display: grid; gap: 8px; }
 
 .progresso__legenda {
@@ -338,10 +364,13 @@ code {
 .progresso__preenchimento--avancado  { background: #4f7ee0; }
 .progresso__preenchimento--concluido { background: var(--cor-sucesso); }
 
+/* =============================================================================
+   COMPONENTE 4 — Abas
+   ========================================================================== */
 .abas__barra {
   display: flex;
   gap: 4px;
-  overflow-x: auto;              
+  overflow-x: auto;              /* rolagem horizontal no celular */
   border-bottom: 1px solid var(--cor-borda);
   margin-bottom: 16px;
   -webkit-overflow-scrolling: touch;
@@ -387,6 +416,9 @@ code {
   font-weight: 700;
 }
 
+/* =============================================================================
+   COMPONENTE 5 — Menu suspenso
+   ========================================================================== */
 .dropdown { position: relative; }
 
 .dropdown__gatilho {
@@ -453,6 +485,9 @@ code {
   font-weight: 600;
 }
 
+/* =============================================================================
+   COMPONENTE 6 — Notificações Toast
+   ========================================================================== */
 .toasts {
   position: fixed;
   z-index: 90;
@@ -527,6 +562,7 @@ code {
 .toast--informacao { border-left-color: var(--cor-info); }
 .toast--informacao .toast__icone { background: var(--cor-info); }
 
+/* ------------------------- Formulário e botões ---------------------------- */
 .formulario { display: grid; gap: 14px; }
 
 .campo { display: grid; gap: 6px; }
@@ -613,6 +649,7 @@ code {
   color: var(--cor-texto-suave);
 }
 
+/* -------------------------------- Rodapé ---------------------------------- */
 .rodape {
   background: #1b2238;
   color: rgba(255, 255, 255, .7);
@@ -621,7 +658,11 @@ code {
   text-align: center;
 }
 
+/* =============================================================================
+   RESPONSIVIDADE
+   ========================================================================== */
 
+/* ---- Tablets (>= 640px) ---- */
 @media (min-width: 640px) {
   .container { padding: 0 24px; }
 
@@ -643,11 +684,12 @@ code {
 
   .grade-cursos { grid-template-columns: repeat(2, 1fr); }
 
-  .paginacao__texto { display: inline; }   
+  .paginacao__texto { display: inline; }   /* volta o texto das setas */
 
   .acoes__rotulo { width: auto; }
 }
 
+/* ---- Desktops (>= 1024px) ---- */
 @media (min-width: 1024px) {
   .conteudo { padding-top: 32px; gap: 24px; }
 
@@ -658,10 +700,12 @@ code {
   .marca__nome { font-size: 1.5rem; }
 }
 
+/* ---- Telas largas (>= 1400px) ---- */
 @media (min-width: 1400px) {
   .container { max-width: 1280px; }
 }
 
+/* ---- Respeita quem prefere menos movimento ---- */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: .01ms !important;

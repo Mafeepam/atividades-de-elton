@@ -1,3 +1,10 @@
+/**
+ * catalogoFactory.js — Factory responsável pelos dados do catálogo de cursos.
+ *
+ * Demonstra o uso de FACTORY para gerenciamento de dados e lógica de negócio:
+ * a camada de apresentação (controlador) nunca manipula o array bruto,
+ * apenas pede "a página N" e recebe o recorte já calculado.
+ */
 (function () {
   'use strict';
 
@@ -6,6 +13,7 @@
     .factory('catalogoFactory', catalogoFactory);
 
   function catalogoFactory() {
+    // Base de dados fictícia, porém semanticamente coerente com o domínio.
     var cursos = [
       { id: 1,  nome: 'Lógica de Programação',        categoria: 'Fundamentos', preco: 149.9,  cargaHoraria: 40, nota: 4.8, matriculas: 1280 },
       { id: 2,  nome: 'HTML5 e CSS3 Moderno',          categoria: 'Front-end',   preco: 189.9,  cargaHoraria: 48, nota: 4.7, matriculas: 2140 },
@@ -29,6 +37,7 @@
 
     var ITENS_POR_PAGINA = 4;
 
+    // API pública da factory.
     return {
       listarCategorias: listarCategorias,
       itensPorPagina: ITENS_POR_PAGINA,
@@ -37,6 +46,7 @@
       totalDe: totalDe
     };
 
+    /** Retorna as categorias disponíveis, com a opção "Todas" à frente. */
     function listarCategorias() {
       var unicas = [];
       cursos.forEach(function (curso) {
@@ -53,6 +63,7 @@
       );
     }
 
+    /** Filtra a base pela categoria informada (null = sem filtro). */
     function filtrarPorCategoria(categoria) {
       if (!categoria) {
         return cursos.slice();
@@ -62,10 +73,12 @@
       });
     }
 
+    /** Quantidade de cursos após o filtro. */
     function totalDe(categoria) {
       return filtrarPorCategoria(categoria).length;
     }
 
+    /** Número total de páginas para a categoria informada (mínimo 1). */
     function contarPaginas(categoria) {
       return Math.max(1, Math.ceil(totalDe(categoria) / ITENS_POR_PAGINA));
     }

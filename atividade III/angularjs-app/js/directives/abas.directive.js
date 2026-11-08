@@ -1,3 +1,17 @@
+/**
+ * abas.directive.js — COMPONENTE 4: Abas (Tabs)
+ *
+ * Uso:
+ *   <abas itens="vm.abasPerfil" aba-inicial="0"></abas>
+ *
+ * Bindings (escopo isolado):
+ *   itens       = (two-way) array de { titulo, texto, topicos[] }
+ *   abaInicial  = (two-way) índice da aba aberta ao carregar
+ *   aoTrocar    & (callback) disparado com { indice, aba }
+ *
+ * A diretiva guarda no próprio $scope qual aba está ativa e mostra
+ * apenas o painel correspondente.
+ */
 (function () {
   'use strict';
 
@@ -44,6 +58,7 @@
   function AbasController() {
     var vm = this;
 
+    // Estado interno: índice da aba ativa.
     vm.indiceAtivo = angular.isNumber(vm.abaInicial) ? vm.abaInicial : 0;
     vm.selecionar = selecionar;
 

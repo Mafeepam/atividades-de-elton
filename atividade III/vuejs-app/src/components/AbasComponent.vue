@@ -1,4 +1,15 @@
+<!--
+  COMPONENTE 4 — Abas (Tabs)
 
+  Uso:
+    <AbasComponent :itens="abasTrilha" :aba-inicial="0" @trocar="aoTrocarAba" />
+
+  props:    itens (array de { titulo, texto, topicos }), abaInicial
+  data:     indiceAtivo — estado local da aba selecionada
+  computed: abaAtiva — o objeto correspondente ao índice ativo
+  emits:    'trocar' com { indice, aba }
+  hook:     created — valida o índice inicial recebido
+-->
 <template>
   <div class="abas">
     <div class="abas__barra" role="tablist">
@@ -49,6 +60,7 @@ export default {
     }
   },
 
+  /** Lifecycle hook: roda antes da montagem, com o estado já disponível. */
   created() {
     if (this.indiceAtivo < 0 || this.indiceAtivo >= this.itens.length) {
       this.indiceAtivo = 0;

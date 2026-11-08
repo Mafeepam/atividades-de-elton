@@ -1,3 +1,14 @@
+<!--
+  COMPONENTE 2 — Paginação (Pagination)
+
+  Uso:
+    <PaginacaoComponent :pagina-atual="pagina" :total-paginas="totalPaginas"
+                        @mudar-pagina="irParaPagina" />
+
+  props:    paginaAtual, totalPaginas
+  computed: paginas, naPrimeira, naUltima
+  emits:    'mudar-pagina' com o número da página escolhida
+-->
 <template>
   <nav class="paginacao" aria-label="Navegação entre páginas">
     <button
@@ -48,6 +59,7 @@ export default {
   emits: ['mudar-pagina'],
 
   computed: {
+    /** Vetor [1..totalPaginas] usado pelo v-for. */
     paginas() {
       return Array.from({ length: this.totalPaginas }, (_, i) => i + 1);
     },
@@ -60,6 +72,7 @@ export default {
   },
 
   methods: {
+    /** Emite o evento apenas quando a página pedida é válida e diferente. */
     selecionar(pagina) {
       if (pagina === this.paginaAtual || pagina < 1 || pagina > this.totalPaginas) {
         return;

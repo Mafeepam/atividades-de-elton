@@ -1,3 +1,21 @@
+/**
+ * menuSuspenso.directive.js — COMPONENTE 5: Menu Suspenso (Dropdown Menu)
+ *
+ * Uso:
+ *   <menu-suspenso rotulo="Categoria"
+ *                  opcoes="vm.categorias"
+ *                  selecionada="vm.categoriaSelecionada"
+ *                  ao-selecionar="vm.filtrarPorCategoria(opcao)"></menu-suspenso>
+ *
+ * Bindings (escopo isolado):
+ *   rotulo       @ (texto)   nome do filtro exibido antes da seleção
+ *   opcoes       = (two-way) array de { rotulo, valor }
+ *   selecionada  = (two-way) opção atualmente escolhida
+ *   aoSelecionar & (callback) recebe { opcao }
+ *
+ * Fecha ao escolher uma opção, ao clicar fora (listener em $document)
+ * e ao pressionar ESC.
+ */
 (function () {
   'use strict';
 
@@ -41,6 +59,10 @@
       controllerAs: '$ctrl',
       bindToController: true,
 
+      /**
+       * link: registra os listeners de "clicar fora" e "ESC".
+       * Eles são removidos no $destroy para não vazar memória.
+       */
       link: function (scope, element, attrs, ctrl) {
         function fecharAoClicarFora(evento) {
           if (!element[0].contains(evento.target) && ctrl.aberto) {
@@ -78,11 +100,13 @@
     vm.ehSelecionada = ehSelecionada;
     vm.textoSelecionado = textoSelecionado;
 
+    /** Abre/fecha o menu. stopPropagation evita o fechamento imediato. */
     function alternar(evento) {
       evento.stopPropagation();
       vm.aberto = !vm.aberto;
     }
 
+    /** Seleciona uma opção, fecha o menu e avisa o componente pai. */
     function escolher(opcao) {
       vm.selecionada = opcao;
       vm.aberto = false;

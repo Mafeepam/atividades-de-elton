@@ -1,3 +1,19 @@
+/**
+ * barraProgresso.directive.js — COMPONENTE 3: Barra de Progresso (Progress Bar)
+ *
+ * Uso:
+ *   <barra-progresso progresso="vm.progressoUpload"
+ *                    rotulo="Enviando material.pdf"
+ *                    mostrar-percentual="true"></barra-progresso>
+ *
+ * Bindings (escopo isolado):
+ *   progresso         = (two-way) número de 0 a 100
+ *   rotulo            @ (texto)   descrição da tarefa em andamento
+ *   mostrarPercentual = (two-way) exibe ou não o número ao lado da barra
+ *
+ * A largura do preenchimento é calculada a partir do valor recebido,
+ * com ng-style, e muda de cor conforme a faixa de progresso.
+ */
 (function () {
   'use strict';
 
@@ -42,6 +58,7 @@
     vm.valorSeguro = valorSeguro;
     vm.classeDaFaixa = classeDaFaixa;
 
+    /** Garante que o valor exibido fique sempre entre 0 e 100. */
     function valorSeguro() {
       var valor = Number(vm.progresso);
       if (isNaN(valor)) {
@@ -50,6 +67,7 @@
       return Math.max(0, Math.min(100, Math.round(valor)));
     }
 
+    /** Cor da barra conforme o estágio da tarefa. */
     function classeDaFaixa() {
       var valor = valorSeguro();
       if (valor >= 100) {

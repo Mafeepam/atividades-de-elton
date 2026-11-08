@@ -5,6 +5,12 @@
  */
 (function(window) {'use strict';
 
+/* exported
+  minErrConfig,
+  errorHandlingConfig,
+  isValidObjectMaxDepth
+*/
+
 var minErrConfig = {
   objectMaxDepth: 5,
   urlErrorParamsEnabled: true
@@ -106,6 +112,10 @@ function minErr(module, ErrorConstructor) {
       }),
       paramPrefix, i;
 
+    // A minErr message has two parts: the message itself and the url that contains the
+    // encoded message.
+    // The message's parameters can contain other error messages which also include error urls.
+    // To prevent the messages from getting too long, we strip the error urls from the parameters.
 
     message += template.replace(/\{\d+\}/g, function(match) {
       var index = +match.slice(1, -1);

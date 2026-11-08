@@ -1,3 +1,16 @@
+/**
+ * notificacaoToast.directive.js — COMPONENTE 6: Notificação Toast
+ *
+ * Uso (basta declarar uma vez, normalmente no final do <body>):
+ *   <notificacao-toast posicao="superior-direita"></notificacao-toast>
+ *
+ * Bindings (escopo isolado):
+ *   posicao @ (texto) canto da tela onde a pilha aparece
+ *
+ * A diretiva não decide *quando* notificar: ela apenas renderiza a fila
+ * mantida por 'toastService'. Qualquer controlador pode chamar
+ * toastService.sucesso('...') e a mensagem aparece aqui.
+ */
 (function () {
   'use strict';
 
