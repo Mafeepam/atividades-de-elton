@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-BR" ng-app="eduTechApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduTech — Portal de Cursos | Atividade AngularJS</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233d4ed6'/><text x='16' y='23' font-size='18' font-family='monospace' fill='white' text-anchor='middle'>&lt;&gt;</text></svg>">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body ng-controller="MainController">
+
+  <header class="cabecalho">
+    <div class="container cabecalho__interno">
+      <div class="marca">
+        <span class="marca__simbolo" aria-hidden="true">&lt;/&gt;</span>
+        <div>
+          <h1 class="marca__nome">EduTech</h1>
+          <p class="marca__descricao">Portal de cursos — Engenharia de Software</p>
+        </div>
+      </div>
+      <span class="etiqueta">AngularJS 1.8 · 6 diretivas</span>
+    </div>
+  </header>
+
+  <main class="container conteudo">
+
+    <section class="secao" id="catalogo">
+      <div class="secao__cabecalho">
+        <div>
+          <h2 class="secao__titulo">Catálogo de cursos</h2>
+          <p class="secao__subtitulo">
+            Exibindo {{ cursos.length }} de {{ totalCursos }} cursos
+            <span ng-if="categoriaSelecionada.valor">
+              na categoria <strong>{{ categoriaSelecionada.rotulo }}</strong>
+            </span>
+          </p>
+        </div>
+
+        <menu-suspenso
+          rotulo="Categoria"
+          opcoes="categorias"
+          selecionada="categoriaSelecionada"
+          ao-selecionar="aplicarFiltroCategoria(opcao)">
+        </menu-suspenso>
+      </div>
+
+      <div class="grade-cursos">
+        <article class="curso" ng-repeat="curso in cursos track by curso.id">
+          <span class="curso__categoria">{{ curso.categoria }}</span>
+          <h3 class="curso__nome">{{ curso.nome }}</h3>
+
+          <dl class="curso__dados">
+            <div>
+              <dt>Carga horária</dt>
+              <dd>{{ curso.cargaHoraria | cargaHoraria }}</dd>
+            </div>
+            <div>
+              <dt>Avaliação</dt>
+              <dd>{{ curso.nota | number:1 }} ★</dd>
+            </div>
+            <div>
+              <dt>Matrículas</dt>
+              <dd>{{ curso.matriculas | milhar }}</dd>
+            </div>
+          </dl>
+
+          <p class="curso__preco">{{ curso.preco | moedaBrasileira }}</p>
+        </article>
+      </div>
+
+      <paginacao
+        pagina-atual="pagina"
+        total-paginas="totalPaginas"
+        ao-mudar-pagina="irParaPagina(pagina)">
+      </paginacao>
+    </section>
+
+    <div class="colunas">
+
+      <section class="secao" id="faq">
+        <h2 class="secao__titulo">Perguntas frequentes</h2>
+        <p class="secao__subtitulo">Apenas uma resposta fica aberta por vez.</p>
+
+        <acordeao
+          itens="perguntasFrequentes"
+          apenas-um-aberto="true"
+          ao-alternar="registrarAberturaFaq(item, aberto)">
+        </acordeao>
+      </section>
+
+      <section class="secao" id="trilha">
+        <h2 class="secao__titulo">Trilha Full Stack</h2>
+        <p class="secao__subtitulo">Detalhes organizados em painéis.</p>
+
+        <abas itens="abasTrilha" aba-inicial="0"></abas>
+      </section>
+    </div>
+
+    <div class="colunas">
+
+      <section class="secao" id="upload">
+        <h2 class="secao__titulo">Envio de material</h2>
+        <p class="secao__subtitulo">Progresso alimentado pelo <code>uploadService</code>.</p>
+
+        <barra-progresso
+          progresso="progressoUpload"
+          rotulo="Enviando {{ nomeArquivo }}"
+          mostrar-percentual="true">
+        </barra-progresso>
+
+        <div class="acoes">
+          <button type="button" class="botao botao--primario"
+                  ng-click="simularUpload()"
+                  ng-disabled="uploadAtivo()">
+            {{ uploadAtivo() ? 'Enviando…' : 'Iniciar envio' }}
+          </button>
+          <button type="button" class="botao botao--neutro"
+                  ng-click="cancelarUpload()"
+                  ng-disabled="!uploadAtivo()">
+            Cancelar
+          </button>
+        </div>
+
+        <div class="acoes--topo" style="margin-top:20px; padding-top:20px;">
+          <p class="secao__subtitulo" style="margin-bottom:14px;">
+            Progresso do aluno em cada módulo da trilha:
+          </p>
+
+          <div class="pilha-progressos">
+            <barra-progresso ng-repeat="modulo in modulosTrilha track by modulo.nome"
+                             progresso="modulo.concluido"
+                             rotulo="{{ modulo.nome }}"
+                             mostrar-percentual="true">
+            </barra-progresso>
+          </div>
+        </div>
+      </section>
+
+      <section class="secao" id="inscricao">
+        <h2 class="secao__titulo">Inscrição na newsletter</h2>
+        <p class="secao__subtitulo">Cada ação devolve uma notificação Toast.</p>
+
+        <form class="formulario" ng-submit="enviarInscricao()" novalidate>
+          <label class="campo">
+            <span class="campo__rotulo">Nome completo</span>
+            <input type="text" class="campo__entrada"
+                   ng-model="inscricao.nome"
+                   ng-change="aoDigitarNome()"
+                   placeholder="Maria Silva">
+          </label>
+
+          <label class="campo">
+            <span class="campo__rotulo">E-mail</span>
+            <input type="email" class="campo__entrada"
+                   ng-model="inscricao.email"
+                   placeholder="maria@exemplo.com">
+          </label>
+
+          <label class="campo campo--linha">
+            <input type="checkbox" ng-model="inscricao.receberNovidades">
+            <span>Quero receber novidades sobre novas turmas</span>
+          </label>
+
+          <p class="previa" ng-if="inscricao.nome || inscricao.email">
+            Pré-visualização: <strong>{{ inscricao.nome || 'sem nome' }}</strong>
+            &lt;{{ inscricao.email || 'sem e-mail' }}&gt;
+          </p>
+
+          <button type="submit" class="botao botao--primario">Confirmar inscrição</button>
+        </form>
+
+        <div class="acoes acoes--topo">
+          <span class="acoes__rotulo">Testar os tipos de notificação:</span>
+          <button type="button" class="botao botao--mini botao--sucesso" ng-click="demonstrarToast('sucesso')">Sucesso</button>
+          <button type="button" class="botao botao--mini botao--erro"    ng-click="demonstrarToast('erro')">Erro</button>
+          <button type="button" class="botao botao--mini botao--aviso"   ng-click="demonstrarToast('aviso')">Aviso</button>
+          <button type="button" class="botao botao--mini botao--info"    ng-click="demonstrarToast('informacao')">Informação</button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="rodape">
+    <div class="container">
+      <p>Universidade Católica do Salvador — Escola de Tecnologias</p>
+      <p>Atividade III — AngularJS · Professor Elton Figueiredo da Silva</p>
+    </div>
+  </footer>
+
+  <notificacao-toast posicao="superior-direita"></notificacao-toast>
+
+  <script src="vendor/angular.min.js"></script>
+
+  <script src="js/app.js"></script>
+
+  <script src="js/services/core.module.js"></script>
+  <script src="js/services/catalogoFactory.js"></script>
+  <script src="js/services/toastService.js"></script>
+  <script src="js/services/uploadService.js"></script>
+  <script src="js/filters/filtros.js"></script>
+
+  <script src="js/directives/components.module.js"></script>
+  <script src="js/directives/acordeao.directive.js"></script>
+  <script src="js/directives/paginacao.directive.js"></script>
+  <script src="js/directives/barraProgresso.directive.js"></script>
+  <script src="js/directives/abas.directive.js"></script>
+  <script src="js/directives/menuSuspenso.directive.js"></script>
+  <script src="js/directives/notificacaoToast.directive.js"></script>
+
+  <script src="js/controllers/mainController.js"></script>
+</body>
+</html>
