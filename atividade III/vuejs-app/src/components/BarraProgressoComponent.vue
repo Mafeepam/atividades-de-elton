@@ -46,14 +46,12 @@ export default {
   emits: ['concluido'],
 
   computed: {
-    /** Garante um valor exibível entre 0 e 100. */
     valorSeguro() {
       const valor = Number(this.progresso);
       if (Number.isNaN(valor)) return 0;
       return Math.max(0, Math.min(100, Math.round(valor)));
     },
 
-    /** Cor da barra conforme o estágio da tarefa. */
     classeDaFaixa() {
       if (this.valorSeguro >= 100) return 'progresso__preenchimento--concluido';
       if (this.valorSeguro >= 60) return 'progresso__preenchimento--avancado';
@@ -62,7 +60,6 @@ export default {
   },
 
   watch: {
-    /** Avisa o componente pai assim que a barra completa. */
     valorSeguro(novo, antigo) {
       if (novo === 100 && antigo < 100) {
         this.$emit('concluido');

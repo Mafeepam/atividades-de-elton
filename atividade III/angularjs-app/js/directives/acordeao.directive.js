@@ -1,16 +1,3 @@
-/**
- * acordeao.directive.js — COMPONENTE 1: Acordeão (Accordion)
- *
- * Uso:
- *   <acordeao itens="vm.perguntas" apenas-um-aberto="true"></acordeao>
- *
- * Bindings (escopo isolado):
- *   itens            = (two-way) array de { titulo, conteudo }
- *   apenasUmAberto   = (two-way) booleano; true fecha os demais ao abrir um
- *   aoAlternar       & (callback) disparado com { item, indice, aberto }
- *
- * A diretiva mantém no próprio $scope o estado de qual item está aberto.
- */
 (function () {
   'use strict';
 
@@ -51,15 +38,13 @@
   function AcordeaoController() {
     var vm = this;
 
-    // Índice do item aberto; -1 significa "todos fechados".
     vm.indiceAberto = -1;
     vm.apenasUmAberto = angular.isDefined(vm.apenasUmAberto) ? vm.apenasUmAberto : true;
-    vm.abertosMultiplos = {}; // usado quando apenasUmAberto = false
+    vm.abertosMultiplos = {}; 
 
     vm.alternar = alternar;
     vm.estaAberto = estaAberto;
 
-    /** Abre o item clicado e, no modo exclusivo, fecha o anterior. */
     function alternar(indice) {
       if (vm.apenasUmAberto) {
         vm.indiceAberto = (vm.indiceAberto === indice) ? -1 : indice;
@@ -76,7 +61,6 @@
       }
     }
 
-    /** Consulta de estado usada pelo ng-class do template. */
     function estaAberto(indice) {
       return vm.apenasUmAberto
         ? vm.indiceAberto === indice

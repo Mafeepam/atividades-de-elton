@@ -16,9 +16,7 @@
 
   function MainController($scope, catalogoFactory, toastService, uploadService) {
 
-    /* ----------------------------------------------------------------
-     * 1. Estado do catálogo (consumido pela PAGINAÇÃO)
-     * ---------------------------------------------------------------- */
+ 
     $scope.pagina = 1;
     $scope.categoriaSelecionada = null;
     $scope.categorias = catalogoFactory.listarCategorias();
@@ -27,23 +25,16 @@
     $scope.totalCursos = 0;
     $scope.itensPorPagina = catalogoFactory.itensPorPagina;
 
-    /* ----------------------------------------------------------------
-     * 2. Estado do formulário (demonstra ng-model / two-way binding)
-     * ---------------------------------------------------------------- */
     $scope.inscricao = {
       nome: '',
       email: '',
       receberNovidades: true
     };
 
-    /* ----------------------------------------------------------------
-     * 3. Estado do upload (consumido pela BARRA DE PROGRESSO)
-     * ---------------------------------------------------------------- */
     $scope.progressoUpload = 0;
     $scope.nomeArquivo = 'plano-de-estudos.pdf';
     $scope.uploadAtivo = function () { return uploadService.emAndamento; };
 
-    // Mesma diretiva <barra-progresso> reutilizada para outro conjunto de dados.
     $scope.modulosTrilha = [
       { nome: 'Bloco 1 — Fundamentos', concluido: 100 },
       { nome: 'Bloco 2 — Front-end',   concluido: 72  },
@@ -51,9 +42,6 @@
       { nome: 'Bloco 4 — Engenharia',  concluido: 0   }
     ];
 
-    /* ----------------------------------------------------------------
-     * 4. Conteúdo do ACORDEÃO (FAQ)
-     * ---------------------------------------------------------------- */
     $scope.perguntasFrequentes = [
       {
         titulo: 'Como funciona o acesso às aulas?',
@@ -84,9 +72,6 @@
       }
     ];
 
-    /* ----------------------------------------------------------------
-     * 5. Conteúdo das ABAS (detalhes da trilha)
-     * ---------------------------------------------------------------- */
     $scope.abasTrilha = [
       {
         titulo: 'Visão geral',
@@ -132,9 +117,6 @@
       }
     ];
 
-    /* ----------------------------------------------------------------
-     * 6. Ações da página
-     * ---------------------------------------------------------------- */
     $scope.irParaPagina = irParaPagina;
     $scope.aplicarFiltroCategoria = aplicarFiltroCategoria;
     $scope.simularUpload = simularUpload;
@@ -146,7 +128,6 @@
 
     carregarPagina();
 
-    /** Recarrega a lista exibida a partir da factory. */
     function carregarPagina() {
       var categoria = $scope.categoriaSelecionada
         ? $scope.categoriaSelecionada.valor
@@ -155,7 +136,6 @@
       $scope.totalPaginas = catalogoFactory.contarPaginas(categoria);
       $scope.totalCursos = catalogoFactory.totalDe(categoria);
 
-      // Evita ficar numa página inexistente após trocar o filtro.
       if ($scope.pagina > $scope.totalPaginas) {
         $scope.pagina = $scope.totalPaginas;
       }
@@ -163,13 +143,11 @@
       $scope.cursos = catalogoFactory.buscarPagina($scope.pagina, categoria);
     }
 
-    /** Callback recebido da diretiva <paginacao>. */
     function irParaPagina(pagina) {
       $scope.pagina = pagina;
       carregarPagina();
     }
 
-    /** Callback recebido da diretiva <menu-suspenso>. */
     function aplicarFiltroCategoria(opcao) {
       $scope.categoriaSelecionada = opcao;
       $scope.pagina = 1;
@@ -182,7 +160,6 @@
       );
     }
 
-    /** Alimenta a diretiva <barra-progresso> por meio do uploadService. */
     function simularUpload() {
       $scope.progressoUpload = 0;
 
@@ -201,7 +178,6 @@
       toastService.aviso('Envio interrompido em ' + $scope.progressoUpload + '%.');
     }
 
-    /** Validação simples do formulário ligado por ng-model. */
     function enviarInscricao() {
       if (!$scope.inscricao.nome || !$scope.inscricao.email) {
         toastService.erro('Preencha nome e e-mail para concluir a inscrição.');
@@ -216,21 +192,18 @@
       $scope.inscricao = { nome: '', email: '', receberNovidades: true };
     }
 
-    /** Demonstra ng-change: reage a cada tecla digitada no campo nome. */
     function aoDigitarNome() {
       if ($scope.inscricao.nome.length === 20) {
         toastService.aviso('O nome está ficando longo — use o nome e o sobrenome.');
       }
     }
 
-    /** Callback da diretiva <acordeao>. */
     function registrarAberturaFaq(item, aberto) {
       if (aberto) {
         toastService.informacao('Você abriu: "' + item.titulo + '"', 2500);
       }
     }
 
-    /** Botões de demonstração dos quatro tipos de toast. */
     function demonstrarToast(tipo) {
       var mensagens = {
         sucesso: 'Matrícula registrada no curso selecionado.',
